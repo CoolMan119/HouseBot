@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const prefix = '>>';
-const token = 'MjM2NTk3MTkwNjExNTY2NjAy.CuL82w.Ch6lmmnx3DBG9Mt3dVQv-cz3hhs';
+const token = 'Make your own token';
 bot.on("ready", () => {
 	bot.user.setStatus("online", "HouseBot | >>help");
 });
