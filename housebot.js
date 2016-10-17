@@ -3,29 +3,39 @@ const yt = require("ytdl-core");
 const bot = new Discord.Client();
 const now = require("performance-now"); 
 const prefix = '>>'; // Prefix for commands, you can change this
-const token = 'Token goes here'; // Token to login to bot goes here
+const token = 'MjM2NTk3MTkwNjExNTY2NjAy.CuOi3w.b7_9VRuVRbLwAZXpvwcKPYK-eMA'; // Token to login to bot goes here
+const logid = "237308574857035777" // Change this to the channel ID of the log channel you want, make it "" for nothing
+var totalmsgs = []
+
 
 
 // HouseBot by houseofkraft
-// Please don't copy this
+// This is a basic bot using discord.js
 
 
 bot.on("ready", () => { // Executes the code below when the bot is ready for use
 	bot.user.setStatus("online", "HouseBot | >>help");
-	console.log("Ready!")
+	console.log("Ready!");
 });
+
+setInterval(() => { // This code here will make the log channel's description will have the uptime
+	message.guild.channels.get(logid).setTopic(":gear: HouseBot Logs | Uptime: " + process.uptime() /60).toFixed(0) + " minute(s)"
+}, 10000)
+
 
 
    
 bot.on("message", message => {  // Executes all the code below when a user sends a message
+
 function checkPerm(member, perm) { // This function will come in handy
     if( message.member.roles.filter(r=>r.hasPermission(perm)).size > 0) {
         return true
     }
     else {
-        return false
+		return false
     }
 }	
+
 
 function play(url) { // A little broken at the moment
 // play streams using ytdl-core
@@ -37,7 +47,18 @@ const streamOptions = { seek: 0, volume: 1 };
 
 
 
-	
+// My little chat logger
+if (logid !== "") {
+  if (message.author !== bot.user) {
+  totalmsgs.push(message.content);
+  var user = message.author.username;
+  var m = message.content;
+  var channelname = message.channel.name;
+  var r = message.author.role
+  message.guild.channels.get(logid).sendMessage("[INFO]: " + user + " said " + m); //+ " in channel " + channelname);
+  }
+}
+
  
 // Commands
 if (message.content.startsWith(prefix + "about"))  message.channel.sendMessage("HouseBot Beta made by houseofkraft");  
@@ -48,11 +69,21 @@ if (message.content === "<@236597190611566602> Hi") message.channel.sendMessage(
 if (message.content === "<@236597190611566602> hi") message.channel.sendMessage("Hi, " + message.author);
 if (message.content === "<@236597190611566602>") message.channel.sendMessage("Wat?");
 if (message.content.startsWith(prefix + "invite")) message.channel.sendMessage("You can invite the bot to other servers by using this link: https://discordapp.com/oauth2/authorize?client_id=236597190611566602&scope=bot&permissions=101376=0x400|0x800|0x8000|0x10000");
-if (message.content.startsWith(prefix + "isadmin")) message.channel.sendMessage("Admin: " + checkPerm(message.author, "ADMINISTRATOR"));
-if (message.content.startsWith(prefix + "say")) {
-    let saytext = message.content.split(" ").slice(1);
-    message.channel.sendMessage(saytext)
+if (message.content.startsWith(prefix + "isadmin"))  message.channel.sendMessage("Admin: " + checkPerm(message.author, "ADMINISTRATOR")); // Mostly for checking if the permission checking works, comment this cmd out to disable
+if (message.content.startsWith(prefix + "uptime")) message.channel.sendMessage("Uptime: " + (process.uptime() /60).toFixed(0) + " minute(s)")
+if (message.content.startsWith(prefix + "wipeall")) {
+   let args = message.content.split(" ").slice(1);
+   message.channel.sendMessage("Purging " + totalmsgs.length + " messages...");
+   message.channel.bulkDelete(totalmsgs);
+   message.channel.sendMessage("Purged " + totalmsgs.length + " messages.");  
 }
+
+if (message.content.startsWith(prefix + "say")) { // For saying text, blacklist is all the way up
+    var user = message.author;
+    let saytext = message.content.split(" ").slice(1);
+	message.channel.sendMessage(saytext);
+}
+
 if (message.content.startsWith(prefix + "kick")) { // Admin Command
      let userToKick = message.mentions.users.first();
      if (checkPerm(message.author, "KICK_MEMBERS") === true) {
@@ -80,10 +111,8 @@ if (message.content.startsWith(prefix + "ban")) { // Admin Command
 }
 
 if (message.content.startsWith(prefix + "ping")) {
-    var old = message.createdTimestamp();
-  message.channel.sendMessage("Ping?")
-  var n = message.createdTimestamp();
-  message.edit("Pong! (took " + n - old + " ms");
+  message.channel.sendMessage("Ping");
+  message.edit("Pong!");
 }
 
 if (message.content.startsWith(prefix + "music_join")) {
