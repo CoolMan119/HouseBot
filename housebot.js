@@ -24,10 +24,6 @@ bot.on("ready", () => { // Executes the code below when the bot is ready for use
    
 bot.on("message", message => {  // Executes all the code below when a user sends a message
 
-// Chat Logger (used to Purge)
-var u = message.user
-var 
-
 function checkPerm(member, perm) { // This function will come in handy
     if( message.member.roles.filter(r=>r.hasPermission(perm)).size > 0) {
         return true
