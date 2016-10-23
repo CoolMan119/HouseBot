@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 const yt = require("ytdl-core");
 const bot = new Discord.Client();
-const now = require("performance-now"); 
 const prefix = '>>'; // Prefix for commands, you can change this
 const token = 'Token'; // Token to login to bot goes here
 var totalmsgs = []
